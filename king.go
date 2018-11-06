@@ -16,6 +16,7 @@ func NewKing(x, y int, isWhite bool) *King {
 			White:  isWhite,
 			Letter: 'K',
 			Value:  99,
+			Moves:  0,
 		},
 	}
 }
@@ -23,6 +24,7 @@ func NewKing(x, y int, isWhite bool) *King {
 func (k King) Clone() PieceI {
 	king := NewKing(k.Pos.X, k.Pos.Y, k.White)
 	king.Taken = k.Taken
+	king.Moves = k.Moves
 	return king
 }
 
@@ -30,12 +32,23 @@ func (k King) CanMove(x, y int, b *Board) bool {
 	if !k.WithinBounds(x, y) {
 		return false
 	}
-	if k.AttackingAllies(x, y, b) {
+
+	attacking := b.GetPieceAt(x, y)
+	if attacking != nil && attacking.IsWhite() == k.White { // Moving on own piece
+		if k.Moves == 0 && attacking.GetLetter() == 'R' && attacking.GetMoves() == 0 { // Castling
+			if (x == 7 && b.GetPieceAt(5, y) == nil && b.GetPieceAt(6, y) == nil && b.IsSafe(5, y, k.White) && b.IsSafe(6, y, k.White)) ||
+				(x == 0 && b.GetPieceAt(3, y) == nil && b.GetPieceAt(2, y) == nil && b.IsSafe(3, y, k.White) && b.IsSafe(2, y, k.White)) {
+				return true
+			}
+		}
+		// Attacking Own Piece
 		return false
 	}
+
 	if abs(x-k.Pos.X) <= 1 && abs(y-k.Pos.Y) <= 1 {
 		return true
 	}
+
 	return false
 }
 
@@ -55,6 +68,18 @@ func (k King) GenerateMoves(b *Board) []vector.Vector2I {
 		}
 
 	}
+
+	// Add castling if possible
+	rook := k.Position()
+	rook.X = 0
+	if k.CanMove(rook.X, rook.Y, b) {
+		moves = append(moves, rook)
+	}
+	rook.X = 7
+	if k.CanMove(rook.X, rook.Y, b) {
+		moves = append(moves, rook)
+	}
+
 	return moves
 }
 
@@ -67,4 +92,24 @@ func (k King) GenerateNewBoards(b *Board) []*Board {
 		boards[i].Move(k.Pos, m)
 	}
 	return boards
+}
+
+func (k *King) Move(x, y int, b *Board) {
+	attacking := b.GetPieceAt(x, y)
+	if attacking != nil && attacking.IsWhite() != k.White {
+		attacking.SetTaken(true)
+	} else if attacking != nil && attacking.IsWhite() == k.White && attacking.GetLetter() == 'R' {
+		if x == 7 {
+			k.Pos = vector.Vector2I{6, y}
+			attacking.SetPosition(vector.Vector2I{5, y})
+		} else if x == 0 {
+			k.Pos = vector.Vector2I{2, y}
+			attacking.SetPosition(vector.Vector2I{3, y})
+		}
+		attacking.IncrementMoves()
+		k.Moves++
+		return
+	}
+	k.Moves++
+	k.Pos = vector.Vector2I{x, y}
 }

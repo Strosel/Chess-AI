@@ -231,8 +231,15 @@ func (b Board) String() string {
 
 func (b Board) Diff(b2 Board) string {
 	if blackAI {
+		if !b.BlackPieces[0].Position().Equals(b2.BlackPieces[0].Position()) && (!b.BlackPieces[5].Position().Equals(b2.BlackPieces[5].Position()) || !b.BlackPieces[7].Position().Equals(b2.BlackPieces[7].Position())) {
+			fX := string(byte(b.BlackPieces[0].Position().X + 97))
+			fY := b.BlackPieces[0].Position().Y + 1
+			tX := string(byte(b2.BlackPieces[0].Position().X + 97))
+			tY := b2.BlackPieces[0].Position().Y + 1
+			return fmt.Sprintf("Castling, king %v%v to %v%v", fX, fY, tX, tY)
+		}
 		for i := 0; i < len(b.BlackPieces); i++ {
-			if b.BlackPieces[i].Position().X != b2.BlackPieces[i].Position().X || b.BlackPieces[i].Position().Y != b2.BlackPieces[i].Position().Y {
+			if !b.BlackPieces[i].Position().Equals(b2.BlackPieces[i].Position()) {
 				fX := string(byte(b.BlackPieces[i].Position().X + 97))
 				fY := b.BlackPieces[i].Position().Y + 1
 				tX := string(byte(b2.BlackPieces[i].Position().X + 97))
@@ -241,8 +248,15 @@ func (b Board) Diff(b2 Board) string {
 			}
 		}
 	} else if whiteAI {
+		if !b.WhitePieces[0].Position().Equals(b2.WhitePieces[0].Position()) && (!b.WhitePieces[5].Position().Equals(b2.WhitePieces[5].Position()) || !b.WhitePieces[7].Position().Equals(b2.WhitePieces[7].Position())) {
+			fX := string(byte(b.WhitePieces[0].Position().X + 97))
+			fY := b.WhitePieces[0].Position().Y + 1
+			tX := string(byte(b2.WhitePieces[0].Position().X + 97))
+			tY := b2.WhitePieces[0].Position().Y + 1
+			return fmt.Sprintf("Castling, king %v%v to %v%v", fX, fY, tX, tY)
+		}
 		for i := 0; i < len(b.WhitePieces); i++ {
-			if b.WhitePieces[i].Position().X != b2.WhitePieces[i].Position().X || b.WhitePieces[i].Position().Y != b2.WhitePieces[i].Position().Y {
+			if !b.WhitePieces[i].Position().Equals(b2.WhitePieces[i].Position()) {
 				fX := string(byte(b.WhitePieces[i].Position().X + 97))
 				fY := b.WhitePieces[i].Position().Y + 1
 				tX := string(byte(b2.WhitePieces[i].Position().X + 97))
@@ -261,4 +275,21 @@ func (b Board) Winner() string {
 		return fmt.Sprintf("%v", BgBlack(Gray("Black")))
 	}
 	return ""
+}
+
+func (b *Board) IsSafe(x, y int, white bool) bool {
+	if white {
+		for _, bp := range b.BlackPieces {
+			if bp.CanMove(x, y, b) {
+				return false
+			}
+		}
+	} else {
+		for _, wp := range b.WhitePieces {
+			if wp.CanMove(x, y, b) {
+				return false
+			}
+		}
+	}
+	return true
 }

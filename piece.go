@@ -16,12 +16,15 @@ type PieceI interface {
 	MoveThroughPieces(int, int, *Board) bool
 	GenerateMoves(*Board) []vector.Vector2I
 	Position() vector.Vector2I
+	SetPosition(vector.Vector2I)
 	IsTaken() bool
 	SetTaken(bool)
 	IsWhite() bool
 	GetValue() int
 	GetLetter() byte
 	Clone() PieceI
+	GetMoves() int
+	IncrementMoves()
 }
 
 //Piece Defines a generic Piece
@@ -29,7 +32,7 @@ type Piece struct {
 	Pos          vector.Vector2I //matrixpos
 	Taken, White bool
 	Letter       byte
-	Value        int
+	Value, Moves int
 }
 
 //GenerateNewBoards Generates a new board for each possible Move of the Piece
@@ -64,6 +67,7 @@ func (p *Piece) Move(x, y int, b *Board) {
 		attacking.SetTaken(true)
 	}
 	p.Pos = vector.Vector2I{x, y}
+	p.Moves++
 }
 
 //AttackingAllies Is the Piece trying to attack an ally
@@ -119,6 +123,10 @@ func (p Piece) Position() vector.Vector2I {
 	return p.Pos
 }
 
+func (p *Piece) SetPosition(vec vector.Vector2I) {
+	p.Pos = vec
+}
+
 func (p Piece) IsTaken() bool {
 	return p.Taken
 }
@@ -137,4 +145,12 @@ func (p Piece) GetValue() int {
 
 func (p Piece) GetLetter() byte {
 	return p.Letter
+}
+
+func (p Piece) GetMoves() int {
+	return p.Moves
+}
+
+func (p *Piece) IncrementMoves() {
+	p.Moves++
 }

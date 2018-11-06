@@ -18,6 +18,7 @@ var (
 	blackAI  bool
 	maxDepth int
 
+	turn       = 1
 	whitesMove = true
 	movePiece  = regexp.MustCompile("([a-h])(\\d) ([a-h])(\\d)")
 )
@@ -50,6 +51,7 @@ func runPlayer() {
 		fmt.Println("")
 		fmt.Println("Comands include:")
 		fmt.Println("\ta2 b3\tmove piece in a2 to b3")
+		fmt.Println("\t\tTo castle move the King on top of the Rook to castle with")
 		fmt.Println("\tprint\tprint the current board")
 		fmt.Println("\texit\texit the game")
 		fmt.Println("")
@@ -69,7 +71,7 @@ func runPlayer() {
 		toY--
 		if !test.IsDone() {
 			movingPiece := test.GetPieceAt(fromX, fromY)
-			if !(movingPiece != nil && movingPiece.IsWhite() == whitesMove) {
+			if movingPiece == nil || movingPiece.IsWhite() != whitesMove {
 				fmt.Println("Not Your Piece")
 				return
 			}
@@ -77,8 +79,9 @@ func runPlayer() {
 			if movingPiece.CanMove(toX, toY, test) {
 				movingPiece.Move(toX, toY, test)
 				whitesMove = !whitesMove
+				turn++
 			} else {
-				fmt.Printf("Can't Move Piece from %v%v to %v%v\n", string(coords[1][0]), fromY, string(coords[3][0]), toY)
+				fmt.Printf("Can't Move Piece from %v%v to %v%v\n", string(coords[1][0]), fromY+1, string(coords[3][0]), toY+1)
 			}
 		}
 	}

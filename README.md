@@ -4,6 +4,6 @@ A Command line chess AI in Go ported from [Code-Bullet/Chess-AI](https://github.
 ## Todo
 - [ ] Undo move
 - [ ] Self-check checking
-- [ ] Add Castling
+- [X] Add Castling
 - [ ] Add En Passant
 - [ ] Add Promotion

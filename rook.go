@@ -16,6 +16,7 @@ func NewRook(x, y int, isWhite bool) *Rook {
 			White:  isWhite,
 			Letter: 'R',
 			Value:  5,
+			Moves:  0,
 		},
 	}
 }
@@ -23,6 +24,7 @@ func NewRook(x, y int, isWhite bool) *Rook {
 func (r Rook) Clone() PieceI {
 	rook := NewRook(r.Pos.X, r.Pos.Y, r.White)
 	rook.Taken = r.Taken
+	rook.Moves = r.Moves
 	return rook
 }
 
