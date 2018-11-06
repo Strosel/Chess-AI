@@ -11,12 +11,11 @@ type King struct {
 func NewKing(x, y int, isWhite bool) *King {
 	return &King{
 		Piece: &Piece{
-			Pos:             vector.Vector2I{x, y},
-			Taken:           false,
-			White:           isWhite,
-			MovingThisPiece: false,
-			Letter:          'K',
-			Value:           99,
+			Pos:    vector.Vector2I{x, y},
+			Taken:  false,
+			White:  isWhite,
+			Letter: 'K',
+			Value:  99,
 		},
 	}
 }

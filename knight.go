@@ -11,12 +11,11 @@ type Knight struct {
 func NewKnight(x, y int, isWhite bool) *Knight {
 	return &Knight{
 		Piece: &Piece{
-			Pos:             vector.Vector2I{x, y},
-			Taken:           false,
-			White:           isWhite,
-			MovingThisPiece: false,
-			Letter:          'H', //Horse BITCH
-			Value:           3,
+			Pos:    vector.Vector2I{x, y},
+			Taken:  false,
+			White:  isWhite,
+			Letter: 'H', //Horse
+			Value:  3,
 		},
 	}
 }

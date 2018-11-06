@@ -20,18 +20,16 @@ type PieceI interface {
 	SetTaken(bool)
 	IsWhite() bool
 	GetValue() int
-	IsMovingThisPiece() bool
-	SetMovingThisPiece(bool)
 	GetLetter() byte
 	Clone() PieceI
 }
 
 //Piece Defines a generic Piece
 type Piece struct {
-	Pos                           vector.Vector2I //matrixpos
-	Taken, White, MovingThisPiece bool
-	Letter                        byte
-	Value                         int
+	Pos          vector.Vector2I //matrixpos
+	Taken, White bool
+	Letter       byte
+	Value        int
 }
 
 //GenerateNewBoards Generates a new board for each possible Move of the Piece
@@ -135,14 +133,6 @@ func (p Piece) IsWhite() bool {
 
 func (p Piece) GetValue() int {
 	return p.Value
-}
-
-func (p Piece) IsMovingThisPiece() bool {
-	return p.MovingThisPiece
-}
-
-func (p *Piece) SetMovingThisPiece(set bool) {
-	p.MovingThisPiece = set
 }
 
 func (p Piece) GetLetter() byte {

@@ -11,12 +11,11 @@ type Queen struct {
 func NewQueen(x, y int, isWhite bool) *Queen {
 	return &Queen{
 		Piece: &Piece{
-			Pos:             vector.Vector2I{x, y},
-			Taken:           false,
-			White:           isWhite,
-			MovingThisPiece: false,
-			Letter:          'Q',
-			Value:           9,
+			Pos:    vector.Vector2I{x, y},
+			Taken:  false,
+			White:  isWhite,
+			Letter: 'Q',
+			Value:  9,
 		},
 	}
 }

@@ -11,12 +11,11 @@ type Rook struct {
 func NewRook(x, y int, isWhite bool) *Rook {
 	return &Rook{
 		Piece: &Piece{
-			Pos:             vector.Vector2I{x, y},
-			Taken:           false,
-			White:           isWhite,
-			MovingThisPiece: false,
-			Letter:          'R',
-			Value:           5,
+			Pos:    vector.Vector2I{x, y},
+			Taken:  false,
+			White:  isWhite,
+			Letter: 'R',
+			Value:  5,
 		},
 	}
 }

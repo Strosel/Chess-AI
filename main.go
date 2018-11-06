@@ -69,19 +69,15 @@ func runPlayer() {
 		toY--
 		if !test.IsDone() {
 			movingPiece := test.GetPieceAt(fromX, fromY)
-			if movingPiece != nil && movingPiece.IsWhite() == whitesMove {
-				movingPiece.SetMovingThisPiece(true)
-			} else {
+			if !(movingPiece != nil && movingPiece.IsWhite() == whitesMove) {
 				fmt.Println("Not Your Piece")
 				return
 			}
 
 			if movingPiece.CanMove(toX, toY, test) {
 				movingPiece.Move(toX, toY, test)
-				movingPiece.SetMovingThisPiece(false)
 				whitesMove = !whitesMove
 			} else {
-				movingPiece.SetMovingThisPiece(false)
 				fmt.Printf("Can't Move Piece from %v%v to %v%v\n", string(coords[1][0]), fromY, string(coords[3][0]), toY)
 			}
 		}

@@ -11,12 +11,11 @@ type Bishop struct {
 func NewBishop(x, y int, isWhite bool) *Bishop {
 	return &Bishop{
 		Piece: &Piece{
-			Pos:             vector.Vector2I{x, y},
-			Taken:           false,
-			White:           isWhite,
-			MovingThisPiece: false,
-			Letter:          'B',
-			Value:           3,
+			Pos:    vector.Vector2I{x, y},
+			Taken:  false,
+			White:  isWhite,
+			Letter: 'B',
+			Value:  3,
 		},
 	}
 }

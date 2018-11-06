@@ -12,12 +12,11 @@ type Pawn struct {
 func NewPawn(x, y int, isWhite bool) *Pawn {
 	return &Pawn{
 		Piece: &Piece{
-			Pos:             vector.Vector2I{x, y},
-			Taken:           false,
-			White:           isWhite,
-			MovingThisPiece: false,
-			Letter:          'p',
-			Value:           1,
+			Pos:    vector.Vector2I{x, y},
+			Taken:  false,
+			White:  isWhite,
+			Letter: 'p',
+			Value:  1,
 		},
 		FirstTurn: true,
 	}
