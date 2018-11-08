@@ -74,12 +74,8 @@ func (k Knight) GenerateMoves(b *Board) []vector.Vector2I {
 }
 
 func (k Knight) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := k.GenerateMoves(b)
+	boards := generateBoards(*k.Piece, b, moves)
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(k.Pos, m)
-	}
 	return boards
 }

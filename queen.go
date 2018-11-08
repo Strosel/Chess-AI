@@ -64,12 +64,8 @@ func (q Queen) GenerateMoves(b *Board) []vector.Vector2I {
 }
 
 func (q Queen) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := q.GenerateMoves(b)
+	boards := generateBoards(*q.Piece, b, moves)
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(q.Pos, m)
-	}
 	return boards
 }

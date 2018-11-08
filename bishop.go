@@ -55,12 +55,8 @@ func (bs Bishop) GenerateMoves(b *Board) []vector.Vector2I {
 }
 
 func (bs Bishop) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := bs.GenerateMoves(b)
+	boards := generateBoards(*bs.Piece, b, moves)
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(bs.Pos, m)
-	}
 	return boards
 }

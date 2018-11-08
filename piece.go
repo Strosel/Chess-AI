@@ -16,7 +16,6 @@ type PieceI interface {
 	MoveThroughPieces(int, int, *Board) bool
 	GenerateMoves(*Board) []vector.Vector2I
 	Position() vector.Vector2I
-	SetPosition(vector.Vector2I)
 	IsTaken() bool
 	SetTaken(bool)
 	IsWhite() bool
@@ -37,13 +36,9 @@ type Piece struct {
 
 //GenerateNewBoards Generates a new board for each possible Move of the Piece
 func (p Piece) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := p.GenerateMoves(b)
+	boards := generateBoards(p, b, moves) // Replace ALL meth occurences to this version
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(p.Pos, m)
-	}
 	return boards
 }
 
@@ -121,10 +116,6 @@ func (p Piece) MoveThroughPieces(x, y int, b *Board) bool {
 
 func (p Piece) Position() vector.Vector2I {
 	return p.Pos
-}
-
-func (p *Piece) SetPosition(vec vector.Vector2I) {
-	p.Pos = vec
 }
 
 func (p Piece) IsTaken() bool {

@@ -115,13 +115,9 @@ func (p Pawn) GenerateMoves(b *Board) []vector.Vector2I {
 }
 
 func (p Pawn) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := p.GenerateMoves(b)
+	boards := generateBoards(*p.Piece, b, moves)
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(p.Pos, m)
-	}
 	return boards
 }
 

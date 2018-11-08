@@ -84,13 +84,9 @@ func (k King) GenerateMoves(b *Board) []vector.Vector2I {
 }
 
 func (k King) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := k.GenerateMoves(b)
+	boards := generateBoards(*k.Piece, b, moves)
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(k.Pos, m)
-	}
 	return boards
 }
 
@@ -101,10 +97,10 @@ func (k *King) Move(x, y int, b *Board) {
 	} else if attacking != nil && attacking.IsWhite() == k.White && attacking.GetLetter() == 'R' {
 		if x == 7 {
 			k.Pos = vector.Vector2I{6, y}
-			attacking.SetPosition(vector.Vector2I{5, y})
+			attacking.Move(5, y, b)
 		} else if x == 0 {
 			k.Pos = vector.Vector2I{2, y}
-			attacking.SetPosition(vector.Vector2I{3, y})
+			attacking.Move(3, y, b)
 		}
 		attacking.IncrementMoves()
 		k.Moves++

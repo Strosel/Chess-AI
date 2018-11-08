@@ -60,12 +60,8 @@ func (r Rook) GenerateMoves(b *Board) []vector.Vector2I {
 }
 
 func (r Rook) GenerateNewBoards(b *Board) []*Board {
-	boards := []*Board{}
 	moves := r.GenerateMoves(b)
+	boards := generateBoards(*r.Piece, b, moves)
 
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(r.Pos, m)
-	}
 	return boards
 }

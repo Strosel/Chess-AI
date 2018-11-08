@@ -13,10 +13,10 @@ import (
 )
 
 var (
-	test     *Board
-	whiteAI  bool
-	blackAI  bool
-	maxDepth int
+	curBoard, lastBoard *Board
+	whiteAI             bool
+	blackAI             bool
+	maxDepth            int
 
 	turn       = 1
 	whitesMove = true
@@ -25,20 +25,20 @@ var (
 
 func runAI() {
 	depth := 0
-	if !test.IsDead() && !test.HasWon() {
+	if !curBoard.IsDead() && !curBoard.HasWon() {
 		if blackAI {
 			if !whitesMove {
-				_, tmp := maxFunAB(test, -400, 400, depth)
-				fmt.Println("Bot>", test.Diff(*tmp))
-				test = tmp
+				_, tmp := maxFunAB(curBoard, -400, 400, depth)
+				fmt.Println("Bot>", curBoard.Diff(*tmp))
+				curBoard = tmp
 				whitesMove = true
 			}
 		}
 		if whiteAI {
 			if whitesMove {
-				_, tmp := minFunAB(test, -400, 400, depth)
-				fmt.Println("Bot>", test.Diff(*tmp))
-				test = tmp
+				_, tmp := minFunAB(curBoard, -400, 400, depth)
+				fmt.Println("Bot>", curBoard.Diff(*tmp))
+				curBoard = tmp
 				whitesMove = false
 			}
 		}
@@ -53,6 +53,7 @@ func runPlayer() {
 		fmt.Println("\ta2 b3\tmove piece in a2 to b3")
 		fmt.Println("\t\tTo castle move the King on top of the Rook to castle with")
 		fmt.Println("\tprint\tprint the current board")
+		fmt.Println("\tundo\tundo the last player move")
 		fmt.Println("\texit\texit the game")
 		fmt.Println("")
 	} else if cmd == "exit" {
@@ -60,7 +61,16 @@ func runPlayer() {
 		os.Exit(0)
 	} else if cmd == "print" {
 		fmt.Println("")
-		fmt.Println(test)
+		fmt.Println(curBoard)
+	} else if cmd == "undo" {
+		if lastBoard == nil {
+			fmt.Println("Can't Undo")
+			return
+		}
+		curBoard = lastBoard.Clone()
+		turn--
+		lastBoard = nil
+		fmt.Println("Undo")
 	} else if movePiece.MatchString(cmd) {
 		coords := movePiece.FindAllStringSubmatch(cmd, -1)[0]
 		fromX := int(byte(coords[1][0])) - 97
@@ -69,15 +79,16 @@ func runPlayer() {
 		toX := int(byte(coords[3][0])) - 97
 		toY, _ := strconv.Atoi(coords[4])
 		toY--
-		if !test.IsDone() {
-			movingPiece := test.GetPieceAt(fromX, fromY)
+		if !curBoard.IsDone() {
+			movingPiece := curBoard.GetPieceAt(fromX, fromY)
 			if movingPiece == nil || movingPiece.IsWhite() != whitesMove {
 				fmt.Println("Not Your Piece")
 				return
 			}
 
-			if movingPiece.CanMove(toX, toY, test) {
-				movingPiece.Move(toX, toY, test)
+			if movingPiece.CanMove(toX, toY, curBoard) {
+				lastBoard = curBoard.Clone()
+				movingPiece.Move(toX, toY, curBoard)
 				whitesMove = !whitesMove
 				turn++
 			} else {
@@ -106,11 +117,11 @@ func main() {
 		os.Exit(0)
 	}
 
-	test = NewBoard()
+	curBoard = NewBoard()
 
 	for true {
-		if test.IsDead() {
-			fmt.Println(test.Winner(), "Winns!")
+		if curBoard.IsDead() {
+			fmt.Println(curBoard.Winner(), "Winns!")
 			os.Exit(0)
 		} else if (whiteAI && whitesMove) || (blackAI && !whitesMove) {
 			runAI()
