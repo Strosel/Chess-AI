@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	. "github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora"
 	"github.com/strosel/goinput"
 )
 
@@ -109,9 +109,9 @@ func main() {
 	}
 
 	if whiteAI && !blackAI {
-		fmt.Printf("Player is %v\nAI is %v\n\n", BgBlack(Gray("Black")), BgGray(Black("White")))
+		fmt.Printf("Player is %v\nAI is %v\n\n", aurora.BgBlack(aurora.Gray("Black")), aurora.BgGray(aurora.Black("White")))
 	} else if !whiteAI && blackAI {
-		fmt.Printf("Player is %v\nAI is %v\n\n", BgGray(Black("White")), BgBlack(Gray("Black")))
+		fmt.Printf("Player is %v\nAI is %v\n\n", aurora.BgGray(aurora.Black("White")), aurora.BgBlack(aurora.Gray("Black")))
 	} else {
 		fmt.Println("Someting is wrong, two players or two AI")
 		os.Exit(0)

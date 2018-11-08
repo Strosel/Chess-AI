@@ -4,14 +4,16 @@ import (
 	vector "github.com/strosel/goutil/Vector"
 )
 
+//King Defines the King Piece
 type King struct {
 	*Piece
 }
 
+//NewKing Create a new King Piece
 func NewKing(x, y int, isWhite bool) *King {
 	return &King{
 		Piece: &Piece{
-			Pos:    vector.Vector2I{x, y},
+			Pos:    vector.Vector2I{X: x, Y: y},
 			Taken:  false,
 			White:  isWhite,
 			Letter: 'K',
@@ -21,6 +23,7 @@ func NewKing(x, y int, isWhite bool) *King {
 	}
 }
 
+//Clone Clone a new King Piece
 func (k King) Clone() PieceI {
 	king := NewKing(k.Pos.X, k.Pos.Y, k.White)
 	king.Taken = k.Taken
@@ -28,6 +31,7 @@ func (k King) Clone() PieceI {
 	return king
 }
 
+//CanMove Check if the King can move to a point on the Board
 func (k King) CanMove(x, y int, b *Board) bool {
 	if !k.WithinBounds(x, y) {
 		return false
@@ -52,6 +56,7 @@ func (k King) CanMove(x, y int, b *Board) bool {
 	return false
 }
 
+//GenerateMoves Generaet a set of moves
 func (k King) GenerateMoves(b *Board) []vector.Vector2I {
 	moves := []vector.Vector2I{}
 	for i := -1; i < 2; i++ {
@@ -83,6 +88,7 @@ func (k King) GenerateMoves(b *Board) []vector.Vector2I {
 	return moves
 }
 
+//GenerateNewBoards Generate a new Board for each move
 func (k King) GenerateNewBoards(b *Board) []*Board {
 	moves := k.GenerateMoves(b)
 	boards := generateBoards(*k.Piece, b, moves)
@@ -90,16 +96,17 @@ func (k King) GenerateNewBoards(b *Board) []*Board {
 	return boards
 }
 
+//Move Move the piece on the board
 func (k *King) Move(x, y int, b *Board) {
 	attacking := b.GetPieceAt(x, y)
 	if attacking != nil && attacking.IsWhite() != k.White {
 		attacking.SetTaken(true)
 	} else if attacking != nil && attacking.IsWhite() == k.White && attacking.GetLetter() == 'R' {
 		if x == 7 {
-			k.Pos = vector.Vector2I{6, y}
+			k.Pos = vector.Vector2I{X: 6, Y: y}
 			attacking.Move(5, y, b)
 		} else if x == 0 {
-			k.Pos = vector.Vector2I{2, y}
+			k.Pos = vector.Vector2I{X: 2, Y: y}
 			attacking.Move(3, y, b)
 		}
 		attacking.IncrementMoves()
@@ -107,5 +114,5 @@ func (k *King) Move(x, y int, b *Board) {
 		return
 	}
 	k.Moves++
-	k.Pos = vector.Vector2I{x, y}
+	k.Pos = vector.Vector2I{X: x, Y: y}
 }

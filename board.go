@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	. "github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora"
 	vector "github.com/strosel/goutil/Vector"
 )
 
@@ -13,6 +13,7 @@ type Board struct {
 	Score                    int
 }
 
+//NewBoard Create a new Board
 func NewBoard() *Board {
 	b := &Board{}
 	b.SetupPieces()
@@ -182,7 +183,7 @@ func (b Board) String() string {
 	// player on top
 
 	if whiteAI && !blackAI {
-		fmt.Printf("Player is %v\nAI is %v\n", BgBlack(Gray("Black")), BgGray(Black("White")))
+		fmt.Printf("Player is %v\nAI is %v\n", aurora.BgBlack(aurora.Gray("Black")), aurora.BgGray(aurora.Black("White")))
 		out += "  A B C D E F G H\n"
 		for y := 0; y < 8; y++ {
 			for x := 0; x < 8; x++ {
@@ -193,9 +194,9 @@ func (b Board) String() string {
 				if piece == nil {
 					out += "  "
 				} else if piece.IsWhite() {
-					out += fmt.Sprintf("%v ", BgGray(Black(string(piece.GetLetter()))))
+					out += fmt.Sprintf("%v ", aurora.BgGray(aurora.Black(string(piece.GetLetter()))))
 				} else if string(piece.GetLetter()) != " " {
-					out += fmt.Sprintf("%v ", BgBlack(Gray(string(piece.GetLetter()))))
+					out += fmt.Sprintf("%v ", aurora.BgBlack(aurora.Gray(string(piece.GetLetter()))))
 				} else {
 					out += "  "
 				}
@@ -204,7 +205,7 @@ func (b Board) String() string {
 		}
 		out += "  A B C D E F G H\n"
 	} else if !whiteAI && blackAI {
-		fmt.Printf("Player is %v\nAI is %v\n", BgGray(Black("White")), BgBlack(Gray("Black")))
+		fmt.Printf("Player is %v\nAI is %v\n", aurora.BgGray(aurora.Black("White")), aurora.BgBlack(aurora.Gray("Black")))
 		out += "  H G F E D C B A\n"
 		for y := 7; y > -1; y-- {
 			for x := 7; x > -1; x-- {
@@ -215,9 +216,9 @@ func (b Board) String() string {
 				if piece == nil {
 					out += "  "
 				} else if piece.IsWhite() {
-					out += fmt.Sprintf("%v ", BgGray(Black(string(piece.GetLetter()))))
+					out += fmt.Sprintf("%v ", aurora.BgGray(aurora.Black(string(piece.GetLetter()))))
 				} else if string(piece.GetLetter()) != " " {
-					out += fmt.Sprintf("%v ", BgBlack(Gray(string(piece.GetLetter()))))
+					out += fmt.Sprintf("%v ", aurora.BgBlack(aurora.Gray(string(piece.GetLetter()))))
 				} else {
 					out += "  "
 				}
@@ -229,6 +230,7 @@ func (b Board) String() string {
 	return out
 }
 
+//Diff Return the move made between b and b2 if any
 func (b Board) Diff(b2 Board) string {
 	if blackAI {
 		if !b.BlackPieces[0].Position().Equals(b2.BlackPieces[0].Position()) && (!b.BlackPieces[5].Position().Equals(b2.BlackPieces[5].Position()) || !b.BlackPieces[7].Position().Equals(b2.BlackPieces[7].Position())) {
@@ -268,15 +270,17 @@ func (b Board) Diff(b2 Board) string {
 	return ""
 }
 
+//Winner Return who won
 func (b Board) Winner() string {
 	if b.BlackPieces[0].IsTaken() {
-		return fmt.Sprintf("%v", BgGray(Black("White")))
+		return fmt.Sprintf("%v", aurora.BgGray(aurora.Black("White")))
 	} else if b.WhitePieces[0].IsTaken() {
-		return fmt.Sprintf("%v", BgBlack(Gray("Black")))
+		return fmt.Sprintf("%v", aurora.BgBlack(aurora.Gray("Black")))
 	}
 	return ""
 }
 
+//IsSafe Check if space x;y is safe for the King
 func (b *Board) IsSafe(x, y int, white bool) bool {
 	if white {
 		for _, bp := range b.BlackPieces {

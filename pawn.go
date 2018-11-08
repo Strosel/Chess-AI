@@ -4,15 +4,17 @@ import (
 	vector "github.com/strosel/goutil/Vector"
 )
 
+//Pawn Defines the Pawn Piece
 type Pawn struct {
 	*Piece
 	LastTurnMoved int
 }
 
+//NewPawn Create a new Pawn Piece
 func NewPawn(x, y int, isWhite bool) *Pawn {
 	return &Pawn{
 		Piece: &Piece{
-			Pos:    vector.Vector2I{x, y},
+			Pos:    vector.Vector2I{X: x, Y: y},
 			Taken:  false,
 			White:  isWhite,
 			Letter: 'p',
@@ -23,6 +25,7 @@ func NewPawn(x, y int, isWhite bool) *Pawn {
 	}
 }
 
+//Clone Clone a new Pawn Piece
 func (p Pawn) Clone() PieceI {
 	pawn := NewPawn(p.Pos.X, p.Pos.Y, p.White)
 	pawn.Taken = p.Taken
@@ -31,6 +34,7 @@ func (p Pawn) Clone() PieceI {
 	return pawn
 }
 
+//CanMove Check if the Pawn can move to a point on the Board
 func (p *Pawn) CanMove(x, y int, b *Board) bool {
 	if !p.WithinBounds(x, y) {
 		return false
@@ -67,6 +71,7 @@ func (p *Pawn) CanMove(x, y int, b *Board) bool {
 	return false
 }
 
+//GenerateMoves Generaet a set of moves
 func (p Pawn) GenerateMoves(b *Board) []vector.Vector2I {
 	x := 0
 	y := 0
@@ -114,6 +119,7 @@ func (p Pawn) GenerateMoves(b *Board) []vector.Vector2I {
 	return moves
 }
 
+//GenerateNewBoards Generate a new Board for each move
 func (p Pawn) GenerateNewBoards(b *Board) []*Board {
 	moves := p.GenerateMoves(b)
 	boards := generateBoards(*p.Piece, b, moves)
@@ -121,11 +127,8 @@ func (p Pawn) GenerateNewBoards(b *Board) []*Board {
 	return boards
 }
 
+//Move Move the piece on the board
 func (p *Pawn) Move(x, y int, b *Board) {
-	attacking := b.GetPieceAt(x, y)
-	if attacking != nil {
-		attacking.SetTaken(true)
-	}
-	p.Pos = vector.Vector2I{x, y}
+	p.Piece.Move(x, y, b)
 	p.LastTurnMoved = turn
 }

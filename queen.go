@@ -4,14 +4,16 @@ import (
 	vector "github.com/strosel/goutil/Vector"
 )
 
+//Queen Defines the Queen Piece
 type Queen struct {
 	*Piece
 }
 
+//NewQueen Create a new Queen Piece
 func NewQueen(x, y int, isWhite bool) *Queen {
 	return &Queen{
 		Piece: &Piece{
-			Pos:    vector.Vector2I{x, y},
+			Pos:    vector.Vector2I{X: x, Y: y},
 			Taken:  false,
 			White:  isWhite,
 			Letter: 'Q',
@@ -20,12 +22,14 @@ func NewQueen(x, y int, isWhite bool) *Queen {
 	}
 }
 
+//Clone Clone a new Queen Piece
 func (q Queen) Clone() PieceI {
 	queen := NewQueen(q.Pos.X, q.Pos.Y, q.White)
 	queen.Taken = q.Taken
 	return queen
 }
 
+//CanMove Check if the Queen can move to a point on the Board
 func (q Queen) CanMove(x, y int, b *Board) bool {
 	if !q.WithinBounds(x, y) {
 		return false
@@ -49,6 +53,7 @@ func (q Queen) CanMove(x, y int, b *Board) bool {
 	return false
 }
 
+//GenerateMoves Generaet a set of moves
 func (q Queen) GenerateMoves(b *Board) []vector.Vector2I {
 	moves := []vector.Vector2I{}
 
@@ -63,6 +68,7 @@ func (q Queen) GenerateMoves(b *Board) []vector.Vector2I {
 	return moves
 }
 
+//GenerateNewBoards Generate a new Board for each move
 func (q Queen) GenerateNewBoards(b *Board) []*Board {
 	moves := q.GenerateMoves(b)
 	boards := generateBoards(*q.Piece, b, moves)

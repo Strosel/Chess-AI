@@ -4,14 +4,16 @@ import (
 	vector "github.com/strosel/goutil/Vector"
 )
 
+//Knight Defines the Knight Piece
 type Knight struct {
 	*Piece
 }
 
+//NewKnight Create a new Knight Piece
 func NewKnight(x, y int, isWhite bool) *Knight {
 	return &Knight{
 		Piece: &Piece{
-			Pos:    vector.Vector2I{x, y},
+			Pos:    vector.Vector2I{X: x, Y: y},
 			Taken:  false,
 			White:  isWhite,
 			Letter: 'H', //Horse
@@ -20,12 +22,14 @@ func NewKnight(x, y int, isWhite bool) *Knight {
 	}
 }
 
+//Clone Clone a new Knight Piece
 func (k Knight) Clone() PieceI {
 	rook := NewKnight(k.Pos.X, k.Pos.Y, k.White)
 	rook.Taken = k.Taken
 	return rook
 }
 
+//CanMove Check if the Knight can move to a point on the Board
 func (k Knight) CanMove(x, y int, b *Board) bool {
 	if !k.WithinBounds(x, y) {
 		return false
@@ -41,6 +45,7 @@ func (k Knight) CanMove(x, y int, b *Board) bool {
 	return false
 }
 
+//GenerateMoves Generaet a set of moves
 func (k Knight) GenerateMoves(b *Board) []vector.Vector2I {
 	moves := []vector.Vector2I{}
 
@@ -73,6 +78,7 @@ func (k Knight) GenerateMoves(b *Board) []vector.Vector2I {
 	return moves
 }
 
+//GenerateNewBoards Generate a new Board for each move
 func (k Knight) GenerateNewBoards(b *Board) []*Board {
 	moves := k.GenerateMoves(b)
 	boards := generateBoards(*k.Piece, b, moves)

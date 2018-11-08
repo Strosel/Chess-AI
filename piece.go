@@ -61,7 +61,7 @@ func (p *Piece) Move(x, y int, b *Board) {
 	if attacking != nil {
 		attacking.SetTaken(true)
 	}
-	p.Pos = vector.Vector2I{x, y}
+	p.Pos = vector.Vector2I{X: x, Y: y}
 	p.Moves++
 }
 
@@ -99,7 +99,7 @@ func (p Piece) MoveThroughPieces(x, y int, b *Board) bool {
 	} else if stepDirectionY < 0 {
 		stepDirectionY = -1
 	}
-	tempPos := vector.Vector2I{p.Pos.X, p.Pos.Y}
+	tempPos := vector.Vector2I{X: p.Pos.X, Y: p.Pos.Y}
 	tempPos.X += stepDirectionX
 	tempPos.Y += stepDirectionY
 	for tempPos.X != x || tempPos.Y != y {
@@ -114,34 +114,42 @@ func (p Piece) MoveThroughPieces(x, y int, b *Board) bool {
 	return false
 }
 
+//Position Get Piece.Pos
 func (p Piece) Position() vector.Vector2I {
 	return p.Pos
 }
 
+//IsTaken Get Piece.Taken
 func (p Piece) IsTaken() bool {
 	return p.Taken
 }
 
+//SetTaken Set Piece.Taken
 func (p *Piece) SetTaken(set bool) {
 	p.Taken = set
 }
 
+//IsWhite Get Piece.White
 func (p Piece) IsWhite() bool {
 	return p.White
 }
 
+//GetValue Get Piece.Value
 func (p Piece) GetValue() int {
 	return p.Value
 }
 
+//GetLetter Get Piece.Letter
 func (p Piece) GetLetter() byte {
 	return p.Letter
 }
 
+//GetMoves Get Piece.Moves
 func (p Piece) GetMoves() int {
 	return p.Moves
 }
 
+//IncrementMoves Increment Piece.Moves by 1
 func (p *Piece) IncrementMoves() {
 	p.Moves++
 }
