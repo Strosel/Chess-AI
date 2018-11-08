@@ -39,7 +39,7 @@ func (k King) CanMove(x, y int, b *Board) bool {
 
 	attacking := b.GetPieceAt(x, y)
 	if attacking != nil && attacking.IsWhite() == k.White { // Moving on own piece
-		if k.Moves == 0 && attacking.GetLetter() == 'R' && attacking.GetMoves() == 0 { // Castling
+		if k.Moves == 0 && b.InCheck(k.White) && attacking.GetLetter() == 'R' && attacking.GetMoves() == 0 { // Castling
 			if (x == 7 && b.GetPieceAt(5, y) == nil && b.GetPieceAt(6, y) == nil && b.IsSafe(5, y, k.White) && b.IsSafe(6, y, k.White)) ||
 				(x == 0 && b.GetPieceAt(3, y) == nil && b.GetPieceAt(2, y) == nil && b.IsSafe(3, y, k.White) && b.IsSafe(2, y, k.White)) {
 				return true
