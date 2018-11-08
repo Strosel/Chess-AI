@@ -301,10 +301,10 @@ func (b *Board) IsSafe(x, y int, white bool) bool {
 func (b Board) InCheck(white bool) bool {
 	if white {
 		king := b.WhitePieces[0].Position()
-		return !b.IsSafe(king.x, king.Y, white)
+		return !b.IsSafe(king.X, king.Y, white)
 	} else {
 		king := b.WhitePieces[0].Position()
-		return !b.IsSafe(king.x, king.Y, white)
+		return !b.IsSafe(king.X, king.Y, white)
 	}
 	return true
 }
