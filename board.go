@@ -298,6 +298,7 @@ func (b *Board) IsSafe(x, y int, white bool) bool {
 	return true
 }
 
+//InCheck Check if the <white> king is in check
 func (b Board) InCheck(white bool) bool {
 	if white {
 		king := b.WhitePieces[0].Position()
@@ -306,5 +307,4 @@ func (b Board) InCheck(white bool) bool {
 		king := b.WhitePieces[0].Position()
 		return !b.IsSafe(king.X, king.Y, white)
 	}
-	return true
 }
