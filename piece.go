@@ -102,7 +102,7 @@ func (p Piece) MoveThroughPieces(x, y int, b *Board) bool {
 	tempPos := vector.Vector2I{X: p.Pos.X, Y: p.Pos.Y}
 	tempPos.X += stepDirectionX
 	tempPos.Y += stepDirectionY
-	for tempPos.X != x || tempPos.Y != y {
+	for p.WithinBounds(tempPos.X, tempPos.Y) && (tempPos.X != x || tempPos.Y != y) {
 		tmp := b.GetPieceAt(tempPos.X, tempPos.Y)
 		if tmp != nil {
 			return true
