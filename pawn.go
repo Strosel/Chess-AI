@@ -7,21 +7,20 @@ import (
 //Pawn Defines the Pawn Piece
 type Pawn struct {
 	*Piece
-	LastTurnMoved int
 }
 
 //NewPawn Create a new Pawn Piece
 func NewPawn(x, y int, isWhite bool) *Pawn {
 	return &Pawn{
 		Piece: &Piece{
-			Pos:    vector.Vector2I{X: x, Y: y},
-			Taken:  false,
-			White:  isWhite,
-			Letter: 'p',
-			Value:  1,
-			Moves:  0,
+			Pos:           vector.Vector2I{X: x, Y: y},
+			Taken:         false,
+			White:         isWhite,
+			Letter:        'p',
+			Value:         1,
+			Moves:         0,
+			LastTurnMoved: 0,
 		},
-		LastTurnMoved: 0,
 	}
 }
 
@@ -41,6 +40,10 @@ func (p *Pawn) CanMove(x, y int, b *Board) bool {
 	}
 	if p.AttackingAllies(x, y, b) {
 		return false
+	}
+
+	if p.EnPassant(x, y, b) != nil {
+		return true
 	}
 
 	attacking := b.IsPieceAt(x, y)
@@ -90,6 +93,10 @@ func (p Pawn) GenerateMoves(b *Board) []vector.Vector2I {
 				moves = append(moves, vector.Vector2I{X: x, Y: y})
 			}
 		}
+
+		if p.EnPassant(x, y, b) != nil {
+			moves = append(moves, vector.Vector2I{X: x, Y: y})
+		}
 	}
 
 	x = p.Pos.X
@@ -129,6 +136,30 @@ func (p Pawn) GenerateNewBoards(b *Board) []*Board {
 
 //Move Move the piece on the board
 func (p *Pawn) Move(x, y int, b *Board) {
+	attacking := p.EnPassant(x, y, b)
+	if attacking != nil {
+		attacking.SetTaken(true)
+	}
 	p.Piece.Move(x, y, b)
 	p.LastTurnMoved = turn
+}
+
+//EnPassant Check if a move to x;y is an En Passant
+func (p Pawn) EnPassant(x, y int, b *Board) PieceI {
+	attacking := b.GetPieceAt(x, y)
+	if abs(p.Pos.X-x) == 1 && abs(p.Pos.Y-y) == 1 && attacking == nil {
+		if p.White {
+			attacking = b.GetPieceAt(x, p.Pos.Y)
+			if attacking != nil && attacking.GetLetter() == 'p' && attacking.GetMoves() == 1 && attacking.IsWhite() != p.White && p.Pos.Y == 3 && abs(turn-attacking.GetLastTurn()) <= 1 {
+				return attacking
+			}
+		} else {
+			attacking = b.GetPieceAt(x, p.Pos.Y)
+			if attacking != nil && attacking.GetLetter() == 'p' && attacking.GetMoves() == 1 && attacking.IsWhite() != p.White && p.Pos.Y == 4 && abs(turn-attacking.GetLastTurn()) <= 1 {
+				return attacking
+			}
+		}
+	}
+
+	return nil
 }

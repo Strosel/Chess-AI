@@ -24,14 +24,15 @@ type PieceI interface {
 	Clone() PieceI
 	GetMoves() int
 	IncrementMoves()
+	GetLastTurn() int
 }
 
 //Piece Defines a generic Piece
 type Piece struct {
-	Pos          vector.Vector2I //matrixpos
-	Taken, White bool
-	Letter       byte
-	Value, Moves int
+	Pos                         vector.Vector2I //matrixpos
+	Taken, White                bool
+	Letter                      byte
+	Value, Moves, LastTurnMoved int
 }
 
 //GenerateNewBoards Generates a new board for each possible Move of the Piece
@@ -152,4 +153,9 @@ func (p Piece) GetMoves() int {
 //IncrementMoves Increment Piece.Moves by 1
 func (p *Piece) IncrementMoves() {
 	p.Moves++
+}
+
+//GetLastTurn Get Piece.LastTurnMoved
+func (p Piece) GetLastTurn() int {
+	return p.LastTurnMoved
 }
