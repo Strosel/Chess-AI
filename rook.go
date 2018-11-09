@@ -33,10 +33,7 @@ func (r Rook) Clone() PieceI {
 
 //CanMove Check if the Rook can move to a point on the Board
 func (r Rook) CanMove(x, y int, b *Board) bool {
-	if !r.WithinBounds(x, y) {
-		return false
-	}
-	if r.AttackingAllies(x, y, b) {
+	if !r.Piece.CanMove(x, y, b) {
 		return false
 	}
 

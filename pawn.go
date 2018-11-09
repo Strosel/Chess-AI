@@ -35,10 +35,7 @@ func (p Pawn) Clone() PieceI {
 
 //CanMove Check if the Pawn can move to a point on the Board
 func (p *Pawn) CanMove(x, y int, b *Board) bool {
-	if !p.WithinBounds(x, y) {
-		return false
-	}
-	if p.AttackingAllies(x, y, b) {
+	if !p.Piece.CanMove(x, y, b) {
 		return false
 	}
 

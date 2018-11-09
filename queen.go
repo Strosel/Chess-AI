@@ -31,10 +31,7 @@ func (q Queen) Clone() PieceI {
 
 //CanMove Check if the Queen can move to a point on the Board
 func (q Queen) CanMove(x, y int, b *Board) bool {
-	if !q.WithinBounds(x, y) {
-		return false
-	}
-	if q.AttackingAllies(x, y, b) {
+	if !q.Piece.CanMove(x, y, b) {
 		return false
 	}
 

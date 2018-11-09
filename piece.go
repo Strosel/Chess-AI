@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/strosel/goutil/Vector"
 )
 
@@ -79,10 +77,13 @@ func (p Piece) AttackingAllies(x, y int, b *Board) bool {
 
 //CanMove Can the piece move to c, y on b
 func (p Piece) CanMove(x, y int, b *Board) bool {
-	fmt.Println("Can move")
 	if !p.WithinBounds(x, y) {
 		return false
 	}
+	if p.AttackingAllies(x, y, b) {
+		return false
+	}
+
 	return true
 }
 

@@ -31,10 +31,7 @@ func (k Knight) Clone() PieceI {
 
 //CanMove Check if the Knight can move to a point on the Board
 func (k Knight) CanMove(x, y int, b *Board) bool {
-	if !k.WithinBounds(x, y) {
-		return false
-	}
-	if k.AttackingAllies(x, y, b) {
+	if !k.Piece.CanMove(x, y, b) {
 		return false
 	}
 

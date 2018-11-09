@@ -31,10 +31,7 @@ func (bs Bishop) Clone() PieceI {
 
 //CanMove Check if the Bishop can move to a point on the Board
 func (bs Bishop) CanMove(x, y int, b *Board) bool {
-	if !bs.WithinBounds(x, y) {
-		return false
-	}
-	if bs.AttackingAllies(x, y, b) {
+	if !bs.Piece.CanMove(x, y, b) {
 		return false
 	}
 
