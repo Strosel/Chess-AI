@@ -5,5 +5,5 @@ A Command line chess AI in Go ported from [Code-Bullet/Chess-AI](https://github.
 - [X] Undo move
 - [ ] Self-check checking
 - [X] Add Castling
-- [ ] Add En Passant
+- [x] Add En Passant
 - [ ] Add Promotion
