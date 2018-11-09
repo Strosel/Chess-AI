@@ -84,8 +84,6 @@ func runPlayer() {
 		toX := int(byte(coords[3][0])) - 97
 		toY, _ := strconv.Atoi(coords[4])
 		toY = abs(toY - 8)
-		fmt.Println(fromY, toY)
-		os.Exit(0)
 		if !curBoard.IsDone() {
 			movingPiece := curBoard.GetPieceAt(fromX, fromY)
 			if movingPiece == nil || movingPiece.IsWhite() != whitesMove {
