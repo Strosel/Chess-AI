@@ -189,7 +189,7 @@ func (b Board) String() string {
 			for x := 0; x < 8; x++ {
 				piece := b.GetPieceAt(x, y)
 				if x == 0 {
-					out += fmt.Sprintf("%v ", y+1)
+					out += fmt.Sprintf("%v ", abs(y-8))
 				}
 				if piece == nil {
 					out += "  "
@@ -211,7 +211,7 @@ func (b Board) String() string {
 			for x := 7; x > -1; x-- {
 				piece := b.GetPieceAt(x, y)
 				if x == 7 {
-					out += fmt.Sprintf("%v ", y+1)
+					out += fmt.Sprintf("%v ", abs(y-8))
 				}
 				if piece == nil {
 					out += "  "

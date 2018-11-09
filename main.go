@@ -7,16 +7,17 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/logrusorgru/aurora"
 	"github.com/strosel/goinput"
 )
 
 var (
-	curBoard, lastBoard *Board
-	whiteAI             bool
-	blackAI             bool
-	maxDepth            int
+	curBoard, lastBoard     *Board
+	whiteAI, blackAI, think bool
+	maxDepth                int
+	aiStart                 time.Time
 
 	turn       = 1
 	whitesMove = true
@@ -24,6 +25,7 @@ var (
 )
 
 func runAI() {
+	aiStart = time.Now()
 	depth := 0
 	if !curBoard.IsDead() && !curBoard.HasWon() {
 		if blackAI {
@@ -42,6 +44,9 @@ func runAI() {
 				whitesMove = false
 			}
 		}
+	}
+	if think {
+		fmt.Println("\tThought for", time.Since(aiStart))
 	}
 }
 
@@ -75,10 +80,12 @@ func runPlayer() {
 		coords := movePiece.FindAllStringSubmatch(cmd, -1)[0]
 		fromX := int(byte(coords[1][0])) - 97
 		fromY, _ := strconv.Atoi(coords[2])
-		fromY--
+		fromY = abs(fromY - 8)
 		toX := int(byte(coords[3][0])) - 97
 		toY, _ := strconv.Atoi(coords[4])
-		toY--
+		toY = abs(toY - 8)
+		fmt.Println(fromY, toY)
+		os.Exit(0)
 		if !curBoard.IsDone() {
 			movingPiece := curBoard.GetPieceAt(fromX, fromY)
 			if movingPiece == nil || movingPiece.IsWhite() != whitesMove {
@@ -100,6 +107,7 @@ func runPlayer() {
 
 func main() {
 	flag.BoolVar(&whiteAI, "blackPlayer", false, "Set the player to black")
+	flag.BoolVar(&think, "time", false, "Print how long the AI thought for")
 	flag.IntVar(&maxDepth, "depth", 3, "Set the search depth for the AI")
 	flag.Parse()
 
