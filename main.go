@@ -70,7 +70,7 @@ func runPlayer() {
 		fmt.Println(curBoard)
 	} else if cmd == "undo" {
 		if lastBoard == nil {
-			fmt.Println("Can't Undo")
+			fmt.Println(aurora.Red("Can't Undo"))
 			return
 		}
 		curBoard = lastBoard.Clone()
@@ -88,7 +88,7 @@ func runPlayer() {
 		if !curBoard.IsDone() {
 			movingPiece := curBoard.GetPieceAt(fromX, fromY)
 			if movingPiece == nil || movingPiece.IsWhite() != whitesMove {
-				fmt.Println("Not Your Piece")
+				fmt.Println(aurora.Red("Not Your Piece"))
 				return
 			}
 
@@ -98,11 +98,12 @@ func runPlayer() {
 				whitesMove = !whitesMove
 				turn++
 			} else {
-				fmt.Printf("Can't Move Piece from %v%v to %v%v\n", string(coords[1][0]), fromY+1, string(coords[3][0]), toY+1)
+				mess := fmt.Sprintf("Can't Move Piece from %v%v to %v%v", string(coords[1][0]), fromY+1, string(coords[3][0]), toY+1)
 				if selfCheck {
-					fmt.Println("Can't put self in check")
+					mess += "\nCan't put self in check"
 					selfCheck = false
 				}
+				fmt.Println(aurora.Red(mess))
 			}
 		}
 	}
@@ -124,7 +125,7 @@ func main() {
 	} else if !whiteAI && blackAI {
 		fmt.Printf("Player is %v\nAI is %v\n\n", aurora.BgGray(aurora.Black("White")), aurora.BgBlack(aurora.Gray("Black")))
 	} else {
-		fmt.Println("Someting is wrong, two players or two AI")
+		fmt.Println(aurora.Red("Someting is wrong, two players or two AI"))
 		os.Exit(0)
 	}
 
@@ -132,7 +133,8 @@ func main() {
 
 	for true {
 		if curBoard.IsDead() {
-			fmt.Println(curBoard.Winner(), "Winns!")
+			fmt.Println("")
+			fmt.Println(curBoard.Winner() + " Winns!")
 			os.Exit(0)
 		} else if (whiteAI && whitesMove) || (blackAI && !whitesMove) {
 			runAI()
