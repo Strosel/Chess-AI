@@ -126,7 +126,7 @@ func (p Pawn) GenerateMoves(b *Board) []vector.Vector2I {
 //GenerateNewBoards Generate a new Board for each move
 func (p Pawn) GenerateNewBoards(b *Board) []*Board {
 	moves := p.GenerateMoves(b)
-	boards := generateBoards(*p.Piece, b, moves)
+	boards := p.generateBoards(b, moves)
 
 	return boards
 }

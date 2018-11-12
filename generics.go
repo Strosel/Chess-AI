@@ -73,14 +73,3 @@ func generateDiagonal(p *Piece, b *Board) []vector.Vector2I {
 func abs(n int) int {
 	return int(math.Abs(float64(n)))
 }
-
-func generateBoards(p Piece, b *Board, moves []vector.Vector2I) []*Board {
-	boards := []*Board{}
-
-	for i, m := range moves {
-		boards = append(boards, b.Clone())
-		boards[i].Move(p.Pos, m)
-	}
-
-	return boards
-}

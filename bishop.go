@@ -59,7 +59,7 @@ func (bs Bishop) GenerateMoves(b *Board) []vector.Vector2I {
 //GenerateNewBoards Generate a new Board for each move
 func (bs Bishop) GenerateNewBoards(b *Board) []*Board {
 	moves := bs.GenerateMoves(b)
-	boards := generateBoards(*bs.Piece, b, moves)
+	boards := bs.generateBoards(b, moves)
 
 	return boards
 }

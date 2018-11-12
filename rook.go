@@ -64,7 +64,7 @@ func (r Rook) GenerateMoves(b *Board) []vector.Vector2I {
 //GenerateNewBoards Generate a new Board for each move
 func (r Rook) GenerateNewBoards(b *Board) []*Board {
 	moves := r.GenerateMoves(b)
-	boards := generateBoards(*r.Piece, b, moves)
+	boards := r.generateBoards(b, moves)
 
 	return boards
 }

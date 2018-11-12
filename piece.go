@@ -6,6 +6,7 @@ import (
 
 //PieceI Piece interface
 type PieceI interface {
+	generateBoards(*Board, []vector.Vector2I) []*Board
 	GenerateNewBoards(*Board) []*Board
 	WithinBounds(int, int) bool
 	Move(int, int, *Board)
@@ -33,10 +34,21 @@ type Piece struct {
 	Value, Moves, LastTurnMoved int
 }
 
+func (p Piece) generateBoards(b *Board, moves []vector.Vector2I) []*Board {
+	boards := []*Board{}
+
+	for i, m := range moves {
+		boards = append(boards, b.Clone())
+		boards[i].Move(p.Pos, m)
+	}
+
+	return boards
+}
+
 //GenerateNewBoards Generates a new board for each possible Move of the Piece
 func (p Piece) GenerateNewBoards(b *Board) []*Board {
 	moves := p.GenerateMoves(b)
-	boards := generateBoards(p, b, moves) // Replace ALL meth occurences to this version
+	boards := p.generateBoards(b, moves)
 
 	return boards
 }
@@ -77,11 +89,32 @@ func (p Piece) AttackingAllies(x, y int, b *Board) bool {
 
 //CanMove Can the piece move to c, y on b
 func (p Piece) CanMove(x, y int, b *Board) bool {
-	if !p.WithinBounds(x, y) {
+	if p.Taken || !p.WithinBounds(x, y) || p.AttackingAllies(x, y, b) {
 		return false
 	}
-	if p.AttackingAllies(x, y, b) {
-		return false
+
+	if b == curBoard {
+		if p.White {
+			king := b.WhitePieces[0].Position()
+			clone := b.Clone()
+			clone.Move(p.Pos, vector.Vector2I{X: x, Y: y})
+			for _, bp := range clone.BlackPieces {
+				if bp.CanMove(king.X, king.Y, clone) {
+					selfCheck = true
+					return false
+				}
+			}
+		} else {
+			king := b.BlackPieces[0].Position()
+			clone := b.Clone()
+			clone.Move(p.Pos, vector.Vector2I{X: x, Y: y})
+			for _, wp := range clone.BlackPieces {
+				if wp.CanMove(king.X, king.Y, clone) {
+					selfCheck = true
+					return false
+				}
+			}
+		}
 	}
 
 	return true

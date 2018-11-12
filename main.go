@@ -22,6 +22,7 @@ var (
 	turn       = 1
 	whitesMove = true
 	movePiece  = regexp.MustCompile("([a-h])(\\d) ([a-h])(\\d)")
+	selfCheck  = false
 )
 
 func runAI() {
@@ -98,6 +99,10 @@ func runPlayer() {
 				turn++
 			} else {
 				fmt.Printf("Can't Move Piece from %v%v to %v%v\n", string(coords[1][0]), fromY+1, string(coords[3][0]), toY+1)
+				if selfCheck {
+					fmt.Println("Can't put self in check")
+					selfCheck = false
+				}
 			}
 		}
 	}
