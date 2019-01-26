@@ -307,3 +307,37 @@ func (b Board) InCheck(white bool) bool {
 	king := b.WhitePieces[0].Position()
 	return !b.IsSafe(king.X, king.Y, white)
 }
+
+//Promote Promote the pawn p to piece rep
+func (b *Board) Promote(p *Pawn, rep string) {
+	// replace the pawn with queen, knight, rook, or bishop
+	if p.White {
+		for i, wp := range b.WhitePieces {
+			if wp == p {
+				if rep == "queen" {
+					b.WhitePieces[i] = NewQueen(p.Pos.X, p.Pos.Y, p.White)
+				} else if rep == "knight" {
+					b.WhitePieces[i] = NewKnight(p.Pos.X, p.Pos.Y, p.White)
+				} else if rep == "rook" {
+					b.WhitePieces[i] = NewRook(p.Pos.X, p.Pos.Y, p.White)
+				} else if rep == "bishop" {
+					b.WhitePieces[i] = NewBishop(p.Pos.X, p.Pos.Y, p.White)
+				}
+			}
+		}
+	} else if !p.White {
+		for i, bp := range b.BlackPieces {
+			if bp == p {
+				if rep == "queen" {
+					b.BlackPieces[i] = NewQueen(p.Pos.X, p.Pos.Y, p.White)
+				} else if rep == "knight" {
+					b.BlackPieces[i] = NewKnight(p.Pos.X, p.Pos.Y, p.White)
+				} else if rep == "rook" {
+					b.BlackPieces[i] = NewRook(p.Pos.X, p.Pos.Y, p.White)
+				} else if rep == "bishop" {
+					b.BlackPieces[i] = NewBishop(p.Pos.X, p.Pos.Y, p.White)
+				}
+			}
+		}
+	}
+}

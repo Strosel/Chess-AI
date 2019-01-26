@@ -6,5 +6,6 @@ A Command line chess AI in Go ported from [Code-Bullet/Chess-AI](https://github.
 - [X] Add Castling
 - [x] Add En Passant
 - [x] Self-Check checking
-- [ ] Add Promotion
+- [x] Add Promotion
 - [ ] Check Mate by being surrounded
+- [ ] Windows valid coloring

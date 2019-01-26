@@ -19,10 +19,11 @@ var (
 	maxDepth                int
 	aiStart                 time.Time
 
-	turn       = 1
-	whitesMove = true
-	movePiece  = regexp.MustCompile("([a-h])(\\d) ([a-h])(\\d)")
-	selfCheck  = false
+	turn         = 1
+	whitesMove   = true
+	movePiece    = regexp.MustCompile("([a-h])(\\d) ([a-h])(\\d)")
+	promotePiece = regexp.MustCompile("([a-h])(\\d) ([a-h])(\\d) (queen|knight|rook|bishop)")
+	selfCheck    = false
 )
 
 func runAI() {
@@ -58,6 +59,7 @@ func runPlayer() {
 		fmt.Println("Comands include:")
 		fmt.Println("\ta2 b3\tmove piece in a2 to b3")
 		fmt.Println("\t\tTo castle move the King on top of the Rook to castle with")
+		fmt.Println("\t\tPromotion moves need the name of the piece to promote to eg. a2 a2 queen")
 		fmt.Println("\tprint\tprint the current board")
 		fmt.Println("\tundo\tundo the last player move")
 		fmt.Println("\texit\texit the game")
@@ -77,7 +79,7 @@ func runPlayer() {
 		turn--
 		lastBoard = nil
 		fmt.Println("Undo")
-	} else if movePiece.MatchString(cmd) {
+	} else if movePiece.MatchString(cmd) || promotePiece.MatchString(cmd) {
 		coords := movePiece.FindAllStringSubmatch(cmd, -1)[0]
 		fromX := int(byte(coords[1][0])) - 97
 		fromY, _ := strconv.Atoi(coords[2])
@@ -90,11 +92,23 @@ func runPlayer() {
 			if movingPiece == nil || movingPiece.IsWhite() != whitesMove {
 				fmt.Println(aurora.Red("Not Your Piece"))
 				return
+			} else if movingPiece.GetLetter() == 'p' &&
+				((movingPiece.IsWhite() && toY == 0) || (!movingPiece.IsWhite() && toY == 7)) &&
+				!promotePiece.MatchString(cmd) {
+				fmt.Println(aurora.Red("Promotion. Check help for info"))
+				return
 			}
 
 			if movingPiece.CanMove(toX, toY, curBoard) {
 				lastBoard = curBoard.Clone()
 				movingPiece.Move(toX, toY, curBoard)
+				if movingPiece.GetLetter() == 'p' && promotePiece.MatchString(cmd) {
+					p := movingPiece.(*Pawn)
+					if (p.White && p.Pos.Y == 0) || (!p.White && p.Pos.Y == 7) {
+						rep := promotePiece.FindAllStringSubmatch(cmd, -1)[0][5]
+						curBoard.Promote(p, rep)
+					}
+				}
 				whitesMove = !whitesMove
 				turn++
 			} else {
